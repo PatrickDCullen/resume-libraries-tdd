@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use function Laravel\Prompts\info;
 
 class GetLibraries extends Command
 {
@@ -25,6 +26,6 @@ class GetLibraries extends Command
      */
     public function handle()
     {
-        //
+        info('Searching projects for packages.');
     }
 }
