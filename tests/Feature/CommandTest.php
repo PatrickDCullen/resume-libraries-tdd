@@ -3,13 +3,13 @@
 use Tests\TestCase;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 
-test('there is a get-libraries command', function () {
-    expect(fn() => $this->artisan('app:get-libraries'))
+test('there is a display-libraries command', function () {
+    expect(fn() => $this->artisan('app:display-libraries'))
         ->not()->toThrow(CommandNotFoundException::class);
 });
 
 test('the get-libraries command outputs something', function() {
-    $this->artisan('app:get-libraries')
+    $this->artisan('app:display-libraries')
         ->expectsOutput()
         ->assertSuccessful();
 });
