@@ -19,7 +19,7 @@ class GetLibraries extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Display libraries your projects depend on.';
 
     /**
      * Execute the console command.

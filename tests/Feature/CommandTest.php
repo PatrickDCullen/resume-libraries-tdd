@@ -13,3 +13,9 @@ test('the get-libraries command outputs something', function() {
         ->expectsOutput()
         ->assertSuccessful();
 });
+
+test('artisan does not output the default command description', function() {
+    $this->artisan('list')
+        ->doesntExpectOutputToContain('Command description')
+        ->assertSuccessful();
+});
