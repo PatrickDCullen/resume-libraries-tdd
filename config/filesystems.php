@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', 'local'),
+    'default' => env('FILESYSTEM_DISK', 'projects'),
 
     /*
     |--------------------------------------------------------------------------
@@ -34,6 +34,16 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/private'),
             'serve' => true,
+            'throw' => false,
+            'report' => false,
+        ],
+        // Nice to have would be intellisense for the config values
+        // That works similarly to VSCode settings.json
+        'projects' => [
+            'driver' => 'local',
+            'root' => dirname(getcwd()),
+            'serve' => true,
+            'visibility' => 'public',
             'throw' => false,
             'report' => false,
         ],

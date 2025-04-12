@@ -1,23 +1,13 @@
 <?php
 
-use App\Services\ProjectsService;
+use Illuminate\Support\Facades\Storage;
 
-test('ProjectsService getParentDirectory() method returns a string', function () {
-    expect(ProjectsService::getParentDirectory())
-        ->toBeString();
-});
+const PROJECT_DIR_NAME = 'resume-libraries-tdd';
 
-test('ProjectsService getParentDirectory() method returns a directory', function () {
-    expect(ProjectsService::getParentDirectory())
-        ->toBeReadableDirectory();
-});
+// This test depends on the local filesystem rather than something that was set up for testing
+test('Projects storage disk has this project in its directories', function () {
+    $projectsDirectoryContents = Storage::directories();
 
-test('ProjectsService getParentdirectory() method returns a directory that contains this project', function() {
-        $projectsDirectory = Storage::build([
-            'driver' => 'local',
-            'root' => ProjectsService::getParentDirectory(),
-        ]);
-
-    expect(in_array("resume-libraries-tdd", $projectsDirectory->directories()))
+    expect(in_array(PROJECT_DIR_NAME, $projectsDirectoryContents))
         ->toBeTrue();
 });
