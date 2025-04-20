@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+
 use function Laravel\Prompts\info;
 
 class DisplayLibraries extends Command
@@ -12,7 +13,7 @@ class DisplayLibraries extends Command
      *
      * @var string
      */
-    protected $signature = 'app:display-libraries';
+    protected $signature = 'app:display-libraries {--testing}';
 
     /**
      * The console command description.
