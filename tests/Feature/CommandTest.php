@@ -61,6 +61,16 @@ test('running the command locally detects 6 projects and excludes this one', fun
     // Then
 });
 
+test('running the command with the test flag detects no projects by default', function () {
+    // Given
+
+    // When
+    $this->artisan('app:display-libraries --testing')
+        ->expectsOutputToContain('0 projects detected...');
+    // Then
+});
+
+
 // We still need a few tests before getting here
 test('running display-libraries in an empty directory tells the user to move it', function () {
     // Given an empty projects directory
