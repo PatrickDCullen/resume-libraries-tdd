@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Foundation\Application;
 
 use function Laravel\Prompts\info;
 
@@ -29,14 +30,21 @@ class DisplayLibraries extends Command
     {
         info('Searching projects for packages.');
 
-        $directory = '/Users/patrickcullen/Personal';
-        if ($this->option('testing')) {
-            // code...
-            $directory = '/Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/projects';
-        }
-
-        // We left off with making the test pass
+        $directory = $this->getDirectory();
 
         info("Scanning {$directory} for projects...");
+    }
+
+    private function getDirectory()
+    {
+        if ($this->option('testing')) {
+            // $directory = '/Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/projects';
+            $directory = storage_path('/framework/testing/disks/projects');
+        } else {
+            // $directory = '/Users/patrickcullen/Personal';
+            $directory = dirname(Application::inferBasePath());
+        }
+
+        return $directory;
     }
 }
