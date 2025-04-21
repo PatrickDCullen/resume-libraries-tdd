@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\info;
 
@@ -33,6 +34,17 @@ class DisplayLibraries extends Command
         $directory = $this->getDirectory();
 
         info("Scanning {$directory} for projects...");
+
+        $disk = Storage::build([
+            'driver' => 'local',
+            'root' => $directory,
+        ]);
+
+        $projectsCount = collect($disk->directories())->filter(function ($project) {
+            return $project !== basename(Application::inferBasePath());
+        })->count();
+
+        info("{$projectsCount} projects detected...");
     }
 
     private function getDirectory()

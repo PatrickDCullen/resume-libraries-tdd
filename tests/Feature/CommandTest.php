@@ -50,6 +50,17 @@ test('running the command with the testing flag scans /storage/framework/testing
     // Then
 });
 
+// Local dependency - don't care right now
+test('running the command locally detects 6 projects and excludes this one', function () {
+    // Given
+
+    // When
+    $this->artisan('app:display-libraries')
+        ->expectsOutputToContain('6 projects detected...');
+    // Then
+});
+
+// We still need a few tests before getting here
 test('running display-libraries in an empty directory tells the user to move it', function () {
     // Given an empty projects directory
 
