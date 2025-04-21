@@ -28,5 +28,15 @@ class DisplayLibraries extends Command
     public function handle()
     {
         info('Searching projects for packages.');
+
+        $directory = '/Users/patrickcullen/Personal';
+        if ($this->option('testing')) {
+            // code...
+            $directory = '/Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/projects';
+        }
+
+        // We left off with making the test pass
+
+        info("Scanning {$directory} for projects...");
     }
 }

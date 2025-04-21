@@ -29,6 +29,27 @@ test('the command accepts a testing flag', function () {
     // Then I get a valid output
 });
 
+// Local only, but still important that this works
+test("running the command without the testing flag scans this project's parent directory", function () {
+    // Given
+
+    // When
+    $this->artisan('app:display-libraries')
+        ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal for projects...');
+    // Then
+});
+
+// This relies on local too, but I don't care right now.
+// Should later be refactored to consider any machine (maybe as part of GitHub workflow)
+test('running the command with the testing flag scans /storage/framework/testing/projects directory', function () {
+    // Given
+
+    // When
+    $this->artisan('app:display-libraries --testing')
+        ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/projects');
+    // Then
+});
+
 test('running display-libraries in an empty directory tells the user to move it', function () {
     // Given an empty projects directory
 
