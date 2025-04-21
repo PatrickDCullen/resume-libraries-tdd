@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 
 test('there is a display-libraries command', function () {
@@ -46,7 +47,7 @@ test('running the command with the testing flag scans /storage/framework/testing
 
     // When
     $this->artisan('app:display-libraries --testing')
-        ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/projects');
+        ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/'.Application::inferBasePath());
     // Then
 });
 
