@@ -51,7 +51,7 @@ class DisplayLibraries extends Command
     {
         if ($this->option('testing')) {
             // $directory = '/Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/projects';
-            $directory = storage_path('/framework/testing/disks/'.Application::inferBasePath());
+            $directory = storage_path('/framework/testing/disks/'.basename(dirname(Application::inferBasePath())));
         } else {
             // $directory = '/Users/patrickcullen/Personal';
             $directory = dirname(Application::inferBasePath());

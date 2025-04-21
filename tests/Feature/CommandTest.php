@@ -47,7 +47,7 @@ test('running the command with the testing flag scans /storage/framework/testing
 
     // When
     $this->artisan('app:display-libraries --testing')
-        ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/'.Application::inferBasePath());
+        ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/'.(basename(dirname(Application::inferBasePath()))));
     // Then
 });
 
