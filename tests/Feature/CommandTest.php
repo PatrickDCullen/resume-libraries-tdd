@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 
 test('there is a display-libraries command', function () {
@@ -70,6 +71,16 @@ test('running the command with the test flag detects no projects by default', fu
     // Then
 });
 
+test('running the command with the test flag and adding a directory in the testing storage detects one project', function () {
+    // Given
+    // This makes projects/fakeProject
+    Storage::fake()->makeDirectory('fakeProject');
+    // When
+    $this->artisan('app:display-libraries --testing')
+        ->expectsOutputToContain('1 projects detected...');
+    // Then
+    Storage::fake()->deleteDirectory('fakeProject');
+});
 
 // We still need a few tests before getting here
 test('running display-libraries in an empty directory tells the user to move it', function () {

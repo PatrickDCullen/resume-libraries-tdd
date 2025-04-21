@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Foundation\Application;
+
 return [
 
     /*
@@ -13,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', 'projects'),
+    'default' => basename(dirname(Application::inferBasePath())),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,9 +41,9 @@ return [
         ],
         // Nice to have would be intellisense for the config values
         // That works similarly to VSCode settings.json
-        'projects' => [
+        basename(dirname(Application::inferBasePath())) => [
             'driver' => 'local',
-            'root' => dirname(getcwd()),
+            'root' => dirname(Application::inferBasePath()),
             'serve' => true,
             'visibility' => 'public',
             'throw' => false,
