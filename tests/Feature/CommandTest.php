@@ -82,11 +82,21 @@ test('running the command with the test flag and adding a directory in the testi
     Storage::fake()->deleteDirectory('fakeProject');
 });
 
-// We still need a few tests before getting here
 test('running display-libraries in an empty directory tells the user to move it', function () {
     // Given an empty projects directory
 
     // When we run the command
-
+    $this->artisan('app:display-libraries --testing')
+        ->expectsOutputToContain('Please install this in your projects directory.');
     // Then the command returns a suitable output
+});
+
+test('running the command in a directory with a project does not tell the user to install the app in their projects directory', function () {
+    // Given
+    Storage::fake()->makeDirectory('fakeProject');
+    // When
+    $this->artisan('app:display-libraries --testing')
+        ->doesntExpectOutputToContain('Please install this in your projects directory.');
+    // Then
+    Storage::fake()->deleteDirectory('fakeProject');
 });

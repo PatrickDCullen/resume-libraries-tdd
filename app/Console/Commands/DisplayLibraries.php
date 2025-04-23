@@ -45,6 +45,10 @@ class DisplayLibraries extends Command
         })->count();
 
         info("{$projectsCount} projects detected...");
+
+        if ($projectsCount <= 0) {
+            info('Please install this in your projects directory.');
+        }
     }
 
     private function getDirectory()
