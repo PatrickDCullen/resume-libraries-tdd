@@ -43,7 +43,7 @@ test("running the command without the testing flag scans this project's parent d
 
 // This relies on local too, but I don't care right now.
 // Should later be refactored to consider any machine (maybe as part of GitHub workflow)
-test('running the command with the testing flag scans /storage/framework/testing/projects directory', function () {
+test('running the command with the testing flag scans /storage/framework/testing/Personal directory', function () {
     // Given
 
     // When
@@ -58,7 +58,7 @@ test('running the command locally detects 6 projects and excludes this one', fun
 
     // When
     $this->artisan('app:display-libraries')
-        ->expectsOutputToContain('6 projects detected...');
+        ->expectsOutputToContain('10 projects detected...');
     // Then
 });
 
