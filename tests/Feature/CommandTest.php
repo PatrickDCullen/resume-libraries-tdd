@@ -22,8 +22,7 @@ test('artisan does not output the default command description', function () {
 });
 
 test('the command accepts a testing flag', function () {
-    // Given I'm running the command from a test
-
+    // Given base case
     // When I run the command with a test flag
     $this->artisan('app:display-libraries --testing')
         ->expectsOutput()
@@ -33,8 +32,7 @@ test('the command accepts a testing flag', function () {
 
 // Local only, but still important that this works
 test("running the command without the testing flag scans this project's parent directory", function () {
-    // Given
-
+    // Given local dependency
     // When
     $this->artisan('app:display-libraries')
         ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal for projects...');
@@ -44,31 +42,28 @@ test("running the command without the testing flag scans this project's parent d
 // This relies on local too, but I don't care right now.
 // Should later be refactored to consider any machine (maybe as part of GitHub workflow)
 test('running the command with the testing flag scans /storage/framework/testing/Personal directory', function () {
-    // Given
-
+    // Given base case
     // When
     $this->artisan('app:display-libraries --testing')
-        ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/'.(basename(dirname(Application::inferBasePath()))));
     // Then
+        ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal/resume-libraries-tdd/storage/framework/testing/disks/'.(basename(dirname(Application::inferBasePath()))));
 });
 
 // Local dependency - don't care right now
-test('running the command locally detects 6 projects and excludes this one', function () {
-    // Given
-
+test('running the command locally detects 11 projects and excludes this one', function () {
+    // Given local dependency
     // When
     $this->artisan('app:display-libraries')
-        ->expectsOutputToContain('10 projects detected...');
     // Then
+        ->expectsOutputToContain('11 projects detected...');
 });
 
 test('running the command with the test flag detects no projects by default', function () {
-    // Given
-
+    // Given base case
     // When
     $this->artisan('app:display-libraries --testing')
-        ->expectsOutputToContain('0 projects detected...');
     // Then
+        ->expectsOutputToContain('0 projects detected...');
 });
 
 test('running the command with the test flag and adding a directory in the testing storage detects one project', function () {
@@ -77,18 +72,17 @@ test('running the command with the test flag and adding a directory in the testi
     Storage::fake()->makeDirectory('fakeProject');
     // When
     $this->artisan('app:display-libraries --testing')
-        ->expectsOutputToContain('1 projects detected...');
     // Then
+        ->expectsOutputToContain('1 projects detected...');
     Storage::fake()->deleteDirectory('fakeProject');
 });
 
 test('running display-libraries in an empty directory tells the user to move it', function () {
     // Given an empty projects directory
-
     // When we run the command
     $this->artisan('app:display-libraries --testing')
-        ->expectsOutputToContain('Please install this in your projects directory.');
     // Then the command returns a suitable output
+        ->expectsOutputToContain('Please install this in your projects directory.');
 });
 
 test('running the command in a directory with a project does not tell the user to install the app in their projects directory', function () {
@@ -96,7 +90,18 @@ test('running the command in a directory with a project does not tell the user t
     Storage::fake()->makeDirectory('fakeProject');
     // When
     $this->artisan('app:display-libraries --testing')
-        ->doesntExpectOutputToContain('Please install this in your projects directory.');
     // Then
+        ->doesntExpectOutputToContain('Please install this in your projects directory.');
+    Storage::fake()->deleteDirectory('fakeProject');
+});
+
+test('running the command in a directory containing an empty project tells the user no dependencies detected', function () {
+    //Given
+    Storage::fake()->makeDirectory('fakeProject');
+    // When 
+    $this->artisan('app:display-libraries --testing')
+    // Then
+        ->expectsOutputToContain('No dependencies detected for this project.');
+
     Storage::fake()->deleteDirectory('fakeProject');
 });

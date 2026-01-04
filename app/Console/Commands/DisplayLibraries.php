@@ -48,7 +48,11 @@ class DisplayLibraries extends Command
 
         if ($projectsCount <= 0) {
             info('Please install this in your projects directory.');
+        } else {
+            info('No dependencies detected for this project.');
         }
+
+        
     }
 
     private function getDirectory()
