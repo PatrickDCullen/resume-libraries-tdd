@@ -31,16 +31,16 @@ class DisplayLibraries extends Command
     {
         info('Searching projects for packages.');
 
-        $directory = $this->getDirectory();
+        $root = $this->getDirectory();
 
-        info("Scanning {$directory} for projects...");
+        info("Scanning {$root} for projects...");
 
-        $disk = Storage::build([
+        $projectsDirectory = Storage::build([
             'driver' => 'local',
-            'root' => $directory,
+            'root' => $root,
         ]);
 
-        $projectsCount = collect($disk->directories())->filter(function ($project) {
+        $projectsCount = collect($projectsDirectory->directories())->filter(function ($project) {
             return $project !== basename(Application::inferBasePath());
         })->count();
 
@@ -49,10 +49,20 @@ class DisplayLibraries extends Command
         if ($projectsCount <= 0) {
             info('Please install this in your projects directory.');
         } else {
-            info('No dependencies detected for this project.');
+            $dependenciesFound = false;
+
+            collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory, &$dependenciesFound) {
+                if ($projectsDirectory->exists("{$project}/composer.json")) {
+                    $dependenciesFound = true;
+                    info('PHP dependencies detected.');
+                }
+            });
+
+            if (! $dependenciesFound) {
+                info('No dependencies detected for this project.');
+            }
         }
 
-        
     }
 
     private function getDirectory()

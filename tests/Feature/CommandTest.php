@@ -96,12 +96,25 @@ test('running the command in a directory with a project does not tell the user t
 });
 
 test('running the command in a directory containing an empty project tells the user no dependencies detected', function () {
-    //Given
+    // Given
     Storage::fake()->makeDirectory('fakeProject');
-    // When 
+    // When
     $this->artisan('app:display-libraries --testing')
     // Then
         ->expectsOutputToContain('No dependencies detected for this project.');
 
+    Storage::fake()->deleteDirectory('fakeProject');
+});
+
+test('running the command in a directory containing a project with a composer.json detects that file', function () {
+    // Given
+    Storage::fake()->makeDirectory('fakeProject');
+    Storage::fake()->put('fakeProject/composer.json', '', 'public');
+    // When
+    $this->artisan('app:display-libraries --testing')
+    // Then
+        ->expectsOutputToContain('PHP dependencies detected.');
+
+    // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');
 });
