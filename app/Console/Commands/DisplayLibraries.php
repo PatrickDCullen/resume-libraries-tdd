@@ -49,36 +49,20 @@ class DisplayLibraries extends Command
         if ($projectsCount <= 0) {
             info('Please install this in your projects directory.');
         } else {
-            // This is a perfect example of something that we can refactor because of TDD
-            // Try figuring out how to get $project usable in the each() as a directory rather than a string
-
-            $phpDependenciesFound = false;
-
-            collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory, &$phpDependenciesFound) {
+            collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory) {
                 if ($projectsDirectory->exists("{$project}/composer.json")) {
-                    $phpDependenciesFound = true;
                     info('PHP dependencies detected.');
+                } else {
+                    info('No dependencies detected for this project.');
                 }
-            });
 
-            if (! $phpDependenciesFound) {
-                info('No dependencies detected for this project.');
-            }
-
-            $jsDependenciesFound = false;
-
-            collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory, &$jsDependenciesFound) {
                 if ($projectsDirectory->exists("{$project}/package.json")) {
-                    $jsDependenciesFound = true;
                     info('JavaScript dependencies detected.');
+                } else {
+                    info('No dependencies detected for this project.');
                 }
             });
-
-            if (! $jsDependenciesFound) {
-                info('No dependencies detected for this project.');
-            }
         }
-
     }
 
     private function getDirectory()
