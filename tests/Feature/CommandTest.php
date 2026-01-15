@@ -35,8 +35,8 @@ test("running the command without the testing flag scans this project's parent d
     // Given local dependency
     // When
     $this->artisan('app:display-libraries')
-        ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal for projects...');
     // Then
+        ->expectsOutputToContain('Scanning /Users/patrickcullen/Personal for projects...');
 });
 
 // This relies on local too, but I don't care right now.
@@ -74,6 +74,8 @@ test('running the command with the test flag and adding a directory in the testi
     $this->artisan('app:display-libraries --testing')
     // Then
         ->expectsOutputToContain('1 projects detected...');
+})->after(function () {
+    // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');
 });
 
@@ -92,6 +94,8 @@ test('running the command in a directory with a project does not tell the user t
     $this->artisan('app:display-libraries --testing')
     // Then
         ->doesntExpectOutputToContain('Please install this in your projects directory.');
+})->after(function () {
+    // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');
 });
 
@@ -102,7 +106,8 @@ test('running the command in a directory containing an empty project tells the u
     $this->artisan('app:display-libraries --testing')
     // Then
         ->expectsOutputToContain('No dependencies detected for this project.');
-
+})->after(function () {
+    // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');
 });
 
@@ -114,7 +119,7 @@ test('running the command in a directory containing a project with a composer.js
     $this->artisan('app:display-libraries --testing')
     // Then
         ->expectsOutputToContain('PHP dependencies detected.');
-
+})->after(function () {
     // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');
 });
@@ -127,7 +132,7 @@ test('running the command in a directory containing a project with a package.jso
     $this->artisan('app:display-libraries --testing')
     // Then
         ->expectsOutputToContain('JavaScript dependencies detected.');
-
+})->after(function () {
     // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');
 });
