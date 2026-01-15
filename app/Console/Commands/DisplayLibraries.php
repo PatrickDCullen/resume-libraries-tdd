@@ -49,20 +49,20 @@ class DisplayLibraries extends Command
         if ($projectsCount <= 0) {
             info('Please install this in your projects directory.');
         } else {
-            $dependenciesFound = false;
-
-            collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory, &$dependenciesFound) {
+            collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory) {
                 if ($projectsDirectory->exists("{$project}/composer.json")) {
-                    $dependenciesFound = true;
                     info('PHP dependencies detected.');
+                } else {
+                    info('No dependencies detected for this project.');
+                }
+
+                if ($projectsDirectory->exists("{$project}/package.json")) {
+                    info('JavaScript dependencies detected.');
+                } else {
+                    info('No dependencies detected for this project.');
                 }
             });
-
-            if (! $dependenciesFound) {
-                info('No dependencies detected for this project.');
-            }
         }
-
     }
 
     private function getDirectory()
