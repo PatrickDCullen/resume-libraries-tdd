@@ -131,3 +131,15 @@ test('running the command in a directory containing a project with a package.jso
     // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');
 });
+
+test('running the command detects and outputs the project name that it is scanning', function () {
+    // Given
+    Storage::fake()->makeDirectory('fakeProj1');
+    // When
+    $this->artisan('app:display-libraries --testing')
+    // Then
+        ->expectsOutputToContain('Scanning fakeProj1...');
+})->after(function () {
+    // Cleanup
+    Storage::fake()->deleteDirectory('fakeProj1');
+});
