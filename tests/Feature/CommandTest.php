@@ -118,3 +118,16 @@ test('running the command in a directory containing a project with a composer.js
     // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');
 });
+
+test('running the command in a directory containing a project with a package.json detects that file', function () {
+    // Given
+    Storage::fake()->makeDirectory('fakeProject');
+    Storage::fake()->put('fakeProject/package.json', '', 'public');
+    // When
+    $this->artisan('app:display-libraries --testing')
+    // Then
+        ->expectsOutputToContain('JavaScript dependencies detected.');
+
+    // Cleanup
+    Storage::fake()->deleteDirectory('fakeProject');
+});
