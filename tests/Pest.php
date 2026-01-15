@@ -43,3 +43,5 @@ function something()
 {
     // ..
 }
+
+pest()->printer()->compact();

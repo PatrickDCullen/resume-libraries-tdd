@@ -50,6 +50,7 @@ class DisplayLibraries extends Command
             info('Please install this in your projects directory.');
         } else {
             collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory) {
+                info("Scanning {$project}...");
                 if ($projectsDirectory->exists("{$project}/composer.json")) {
                     info('PHP dependencies detected.');
                 } else {
