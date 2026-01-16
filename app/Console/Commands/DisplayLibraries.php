@@ -51,15 +51,18 @@ class DisplayLibraries extends Command
         } else {
             collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory) {
                 info("Scanning {$project}...");
+                $hasDependencies = false;
                 if ($projectsDirectory->exists("{$project}/composer.json")) {
                     info('PHP dependencies detected.');
-                } else {
-                    info('No dependencies detected for this project.');
+                    $hasDependencies = true;
                 }
 
                 if ($projectsDirectory->exists("{$project}/package.json")) {
                     info('JavaScript dependencies detected.');
-                } else {
+                    $hasDependencies = true;
+                }
+
+                if (! $hasDependencies) {
                     info('No dependencies detected for this project.');
                 }
             });
