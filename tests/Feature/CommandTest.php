@@ -157,10 +157,10 @@ test('running the command in a project with no dependencies outputs one and only
     // We have to use withoutMockingConsoleOutput in order to act on the output in this test
     // https://stackoverflow.com/questions/67828985/how-to-inspect-the-actual-laravel-command-output-while-writing-tests
     $this->withoutMockingConsoleOutput()->artisan('app:display-libraries --testing');
+    // Then
     $output = Artisan::output();
     $nullMessageCount = substr_count($output, 'No dependencies detected for this project.');
-    // Then
-    $this->assertEquals($nullMessageCount, 1);
+    expect($nullMessageCount)->toBe(1);
 })->after(function () {
     // Cleanup
     Storage::fake()->deleteDirectory('emptyProject');
