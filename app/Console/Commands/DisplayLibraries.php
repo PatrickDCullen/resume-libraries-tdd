@@ -71,6 +71,11 @@ class DisplayLibraries extends Command
         });
     }
 
+    public function getComposerRequirements($fileContents)
+    {
+        return array_keys(json_decode($fileContents, true)['require']);
+    }
+
     private function getDirectory()
     {
         if ($this->option('testing')) {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\DisplayLibraries;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
@@ -164,4 +165,19 @@ test('running the command in a project with no dependencies outputs one and only
 })->after(function () {
     // Cleanup
     Storage::fake()->deleteDirectory('emptyProject');
+});
+
+// todo this might even be a different test
+test('parsing a composer.json file for its dependencies returns them as an array of strings', function () {
+    // Given
+    $composer = file_get_contents(__DIR__.'/../Fixtures/composer.json');
+
+    // When
+    $requirements = (new DisplayLibraries)->getComposerRequirements($composer);
+
+    // Then
+    $correctRequirements = [
+        'php', 'laravel/framework', 'laravel/tinker', 'livewire/flux', 'livewire/volt',
+    ];
+    expect($requirements)->toBe($correctRequirements);
 });
