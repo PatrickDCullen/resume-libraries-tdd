@@ -4,8 +4,21 @@ namespace App\Services;
 
 class Parser
 {
-    public static function getComposerRequirements(string $fileContents)
+    /**
+     * Root level directory where composer.json
+     * and package.json can be found
+     */
+    protected string $projectRoot;
+
+    protected string $fileContents;
+
+    public function __construct(string $projectRoot)
     {
-        return array_keys(json_decode($fileContents, true)['require']);
+        $this->fileContents = file_get_contents($projectRoot.'composer.json');
+    }
+
+    public function getComposerRequirements()
+    {
+        return array_keys(json_decode($this->fileContents, true)['require']);
     }
 }
