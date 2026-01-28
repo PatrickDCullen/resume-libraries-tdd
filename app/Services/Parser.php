@@ -17,7 +17,7 @@ class Parser
         $this->fileContents = file_get_contents($projectRoot.'composer.json');
     }
 
-    public function getComposerRequirements()
+    public function getComposerRequirements(): array
     {
         return array_keys(json_decode($this->fileContents, true)['require']);
     }
