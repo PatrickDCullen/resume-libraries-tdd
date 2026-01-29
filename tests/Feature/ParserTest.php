@@ -99,5 +99,19 @@ test('parsing a package.json file for dev dependencies results in the correct ar
     expect($devReqs)->toBe($expectedDevReqs);
 });
 
+test('creating a parser with a project that has no package.json works', function () {
+    new Parser('tests/Fixtures/noPackageJson/');
+})->throwsNoExceptions();
+
+test('creating a parser with a project that has no composer.json works', function () {
+    new Parser('tests/Fixtures/noComposerJson/');
+})->throwsNoExceptions();
+
+test("parsing dev requirements of a composer.json file that doesn't have any fails gracefully", function () {
+    $parser = new Parser('tests/Fixtures/noComposerDevReqs/');
+    $devReqs = $parser->getComposerDevRequirements();
+    expect($devReqs)->toBe([]);
+});
+
 // todo next test cases should be based on what you actually see in the wild -
 // is there extra space? do you cover cases where there are only one type of dep (composer vs. npm? dev vs regular dep?)
