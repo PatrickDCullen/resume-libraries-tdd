@@ -8,6 +8,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\info;
+use function Laravel\Prompts\note;
+use function Laravel\Prompts\warning;
 
 class DisplayLibraries extends Command
 {
@@ -30,11 +32,11 @@ class DisplayLibraries extends Command
      */
     public function handle()
     {
-        info('Searching projects for packages.');
+        note('Searching projects for packages.');
 
         $root = $this->getDirectory();
 
-        info("Scanning {$root} for projects...");
+        note("Scanning {$root} for projects...");
 
         $projectsDirectory = Storage::build([
             'driver' => 'local',
@@ -45,31 +47,31 @@ class DisplayLibraries extends Command
             return $project !== basename(Application::inferBasePath());
         })->count();
 
-        info("{$projectsCount} projects detected...");
+        note("{$projectsCount} projects detected.");
 
         if ($projectsCount <= 0) {
-            info('Please install this in your projects directory.');
+            note('Please install this in your projects directory.');
 
             return 0;
         }
 
         collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory, $root) {
-            info("Scanning {$project}...");
+            note("Scanning {$project}...");
 
             if (! $projectsDirectory->exists("{$project}/composer.json") && ! $projectsDirectory->exists("{$project}/package.json")) {
-                info('No dependencies detected for this project.');
+                warning('No dependencies detected for this project.');
             }
 
             $parser = new Parser("{$root}/{$project}/");
 
             if ($projectsDirectory->exists("{$project}/composer.json")) {
-                info('PHP dependencies detected.');
+                note('PHP dependencies detected:');
                 $this->printComposerRequirements($parser);
                 $this->printComposerDevRequirements($parser);
             }
 
             if ($projectsDirectory->exists("{$project}/package.json")) {
-                info('JavaScript dependencies detected.');
+                note('JavaScript dependencies detected:');
                 $this->printNpmRequirements($parser);
                 $this->printNpmDevRequirements($parser);
             }

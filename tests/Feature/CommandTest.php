@@ -56,7 +56,7 @@ test('running the command locally detects 11 projects and excludes this one', fu
     // When
     $this->artisan('app:display-libraries')
     // Then
-        ->expectsOutputToContain('11 projects detected...');
+        ->expectsOutputToContain('11 projects detected.');
 });
 
 test('running the command with the test flag detects no projects by default', function () {
@@ -64,7 +64,7 @@ test('running the command with the test flag detects no projects by default', fu
     // When
     $this->artisan('app:display-libraries --testing')
     // Then
-        ->expectsOutputToContain('0 projects detected...');
+        ->expectsOutputToContain('0 projects detected.');
 });
 
 test('running the command with the test flag and adding a directory in the testing storage detects one project', function () {
@@ -74,7 +74,7 @@ test('running the command with the test flag and adding a directory in the testi
     // When
     $this->artisan('app:display-libraries --testing')
     // Then
-        ->expectsOutputToContain('1 projects detected...');
+        ->expectsOutputToContain('1 projects detected.');
 })->after(function () {
     // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');
@@ -119,7 +119,7 @@ test('running the command in a directory containing a project with a composer.js
     // When
     $this->artisan('app:display-libraries --testing')
     // Then
-        ->expectsOutputToContain('PHP dependencies detected.');
+        ->expectsOutputToContain('PHP dependencies detected:');
 })->after(function () {
     // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');
@@ -132,7 +132,7 @@ test('running the command in a directory containing a project with a package.jso
     // When
     $this->artisan('app:display-libraries --testing')
     // Then
-        ->expectsOutputToContain('JavaScript dependencies detected.');
+        ->expectsOutputToContain('JavaScript dependencies detected:');
 })->after(function () {
     // Cleanup
     Storage::fake()->deleteDirectory('fakeProject');

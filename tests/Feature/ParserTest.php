@@ -107,11 +107,9 @@ test('creating a parser with a project that has no composer.json works', functio
     new Parser('tests/Fixtures/noComposerJson/');
 })->throwsNoExceptions();
 
+// Didn't make tests for the other three cases, this may make refactoring the parser more difficult
 test("parsing dev requirements of a composer.json file that doesn't have any fails gracefully", function () {
     $parser = new Parser('tests/Fixtures/noComposerDevReqs/');
     $devReqs = $parser->getComposerDevRequirements();
     expect($devReqs)->toBe([]);
 });
-
-// todo next test cases should be based on what you actually see in the wild -
-// is there extra space? do you cover cases where there are only one type of dep (composer vs. npm? dev vs regular dep?)
