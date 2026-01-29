@@ -17,3 +17,28 @@ test('parsing a composer.json file for its dependencies returns them as an array
     ];
     expect($requirements)->toBe($correctRequirements);
 });
+
+test('parsing a composer.json file for dev dependencies results in an array of dev dependencies', function () {
+    // Given
+    // setup a Parser instance with a project root pointed at our testing fixture
+    $parser = new Parser('tests/Fixtures/');
+
+    // When
+    // I call the method to parse for the dev requirements
+    $devReqs = $parser->getComposerDevRequirements();
+
+    // Then
+    $expectedReqs = [
+        'fakerphp/faker',
+        'laravel/boost',
+        'laravel/pail',
+        'laravel/pint',
+        'laravel/sail',
+        'mockery/mockery',
+        'nunomaduro/collision',
+        'pestphp/pest',
+        'pestphp/pest-plugin-laravel',
+    ];
+
+    expect($devReqs)->toBe($expectedReqs);
+});

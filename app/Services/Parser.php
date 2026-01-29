@@ -21,4 +21,9 @@ class Parser
     {
         return array_keys(json_decode($this->fileContents, true)['require']);
     }
+
+    public function getComposerDevRequirements()
+    {
+        return array_keys(json_decode($this->fileContents, true)['require-dev']);
+    }
 }
