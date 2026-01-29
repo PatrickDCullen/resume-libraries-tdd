@@ -10,20 +10,28 @@ class Parser
      */
     protected string $projectRoot;
 
-    protected string $fileContents;
+    protected string $composerJsonContents;
+
+    protected string $packageJsonContents;
 
     public function __construct(string $projectRoot)
     {
-        $this->fileContents = file_get_contents($projectRoot.'composer.json');
+        $this->composerJsonContents = file_get_contents($projectRoot.'composer.json');
+        $this->packageJsonContents = file_get_contents($projectRoot.'package.json');
     }
 
     public function getComposerRequirements(): array
     {
-        return array_keys(json_decode($this->fileContents, true)['require']);
+        return array_keys(json_decode($this->composerJsonContents, true)['require']);
     }
 
     public function getComposerDevRequirements()
     {
-        return array_keys(json_decode($this->fileContents, true)['require-dev']);
+        return array_keys(json_decode($this->composerJsonContents, true)['require-dev']);
+    }
+
+    public function getNpmRequirements()
+    {
+        return array_keys(json_decode($this->packageJsonContents, true)['dependencies']);
     }
 }

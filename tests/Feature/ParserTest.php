@@ -2,7 +2,7 @@
 
 use App\Services\Parser;
 
-test('parsing a composer.json file for its dependencies returns them as an array of strings', function () {
+test('parsing a composer.json file for its dependencies returns them as an accurate array of strings', function () {
     // Given
     // This is the directory of the project - where we can find our composer.json file
     $projectRoot = (__DIR__.'/../Fixtures/');
@@ -18,7 +18,7 @@ test('parsing a composer.json file for its dependencies returns them as an array
     expect($requirements)->toBe($correctRequirements);
 });
 
-test('parsing a composer.json file for dev dependencies results in an array of dev dependencies', function () {
+test('parsing a composer.json file for dev dependencies results in the correct array of dev dependencies', function () {
     // Given
     // setup a Parser instance with a project root pointed at our testing fixture
     $parser = new Parser('tests/Fixtures/');
@@ -42,3 +42,32 @@ test('parsing a composer.json file for dev dependencies results in an array of d
 
     expect($devReqs)->toBe($expectedReqs);
 });
+
+test('parsing a package.json file for dependencies results in the correct array of dependencies', function () {
+    // Given
+    $parser = new Parser('tests/Fixtures/');
+
+    // When
+    $devReqs = $parser->getNpmRequirements();
+
+    // Then
+    $expectedReqs = [
+        '@inertiajs/vue3',
+        '@vueuse/core',
+        'class-variance-authority',
+        'clsx',
+        'laravel-vite-plugin',
+        'lucide-vue-next',
+        'reka-ui',
+        'tailwind-merge',
+        'tailwindcss',
+        'tw-animate-css',
+        'vue',
+    ];
+
+    expect($devReqs)->toBe($expectedReqs);
+});
+
+// todo same test for package.json dev deps
+// todo next test cases should be based on what you actually see in the wild -
+// is there extra space? do you cover cases where there are only one type of dep (composer vs. npm? dev vs regular dep?)
