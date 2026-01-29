@@ -27,6 +27,10 @@ class Parser
 
     public function getComposerRequirements(): array
     {
+        if (! $this->composerJsonContents) {
+            return [];
+        }
+
         if (! array_key_exists('require', json_decode($this->composerJsonContents, true))) {
             return [];
         }
@@ -36,6 +40,10 @@ class Parser
 
     public function getComposerDevRequirements(): array
     {
+        if (! $this->composerJsonContents) {
+            return [];
+        }
+
         if (! array_key_exists('require-dev', json_decode($this->composerJsonContents, true))) {
             return [];
         }
@@ -45,6 +53,10 @@ class Parser
 
     public function getNpmRequirements(): array
     {
+        if (! $this->packageJsonContents) {
+            return [];
+        }
+
         if (! array_key_exists('dependencies', json_decode($this->packageJsonContents, true))) {
             return [];
         }
@@ -54,6 +66,10 @@ class Parser
 
     public function getNpmDevRequirements(): array
     {
+        if (! $this->packageJsonContents) {
+            return [];
+        }
+
         if (! array_key_exists('devDependencies', json_decode($this->packageJsonContents, true))) {
             return [];
         }

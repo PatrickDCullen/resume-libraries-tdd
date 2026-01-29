@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Parser;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Storage;
@@ -52,21 +53,47 @@ class DisplayLibraries extends Command
             return 0;
         }
 
-        collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory) {
+        collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory, $root) {
             info("Scanning {$project}...");
 
             if (! $projectsDirectory->exists("{$project}/composer.json") && ! $projectsDirectory->exists("{$project}/package.json")) {
                 info('No dependencies detected for this project.');
             }
 
+            $parser = new Parser("{$root}/{$project}/");
+
             if ($projectsDirectory->exists("{$project}/composer.json")) {
                 info('PHP dependencies detected.');
+                $this->printComposerRequirements($parser);
+                $this->printComposerDevRequirements($parser);
             }
 
             if ($projectsDirectory->exists("{$project}/package.json")) {
                 info('JavaScript dependencies detected.');
+                $this->printNpmRequirements($parser);
+                $this->printNpmDevRequirements($parser);
             }
         });
+    }
+
+    private function printComposerRequirements($parser)
+    {
+        $parser->getComposerRequirements() === [] ?: info(implode(', ', $parser->getComposerRequirements()));
+    }
+
+    private function printComposerDevRequirements($parser)
+    {
+        $parser->getComposerDevRequirements() === [] ?: info(implode(', ', $parser->getComposerDevRequirements()));
+    }
+
+    private function printNpmRequirements($parser)
+    {
+        $parser->getNpmRequirements() === [] ?: info(implode(', ', $parser->getNpmRequirements()));
+    }
+
+    private function printNpmDevRequirements($parser)
+    {
+        $parser->getNpmDevRequirements() === [] ?: info(implode(', ', $parser->getNpmDevRequirements()));
     }
 
     private function getDirectory()
