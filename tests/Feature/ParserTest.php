@@ -28,7 +28,7 @@ test('parsing a composer.json file for dev dependencies results in the correct a
     $devReqs = $parser->getComposerDevRequirements();
 
     // Then
-    $expectedReqs = [
+    $expectedDevReqs = [
         'fakerphp/faker',
         'laravel/boost',
         'laravel/pail',
@@ -40,7 +40,7 @@ test('parsing a composer.json file for dev dependencies results in the correct a
         'pestphp/pest-plugin-laravel',
     ];
 
-    expect($devReqs)->toBe($expectedReqs);
+    expect($devReqs)->toBe($expectedDevReqs);
 });
 
 test('parsing a package.json file for dependencies results in the correct array of dependencies', function () {
@@ -48,7 +48,7 @@ test('parsing a package.json file for dependencies results in the correct array 
     $parser = new Parser('tests/Fixtures/');
 
     // When
-    $devReqs = $parser->getNpmRequirements();
+    $requirements = $parser->getNpmRequirements();
 
     // Then
     $expectedReqs = [
@@ -65,9 +65,39 @@ test('parsing a package.json file for dependencies results in the correct array 
         'vue',
     ];
 
-    expect($devReqs)->toBe($expectedReqs);
+    expect($requirements)->toBe($expectedReqs);
 });
 
-// todo same test for package.json dev deps
+test('parsing a package.json file for dev dependencies results in the correct array of dev dependencies', function () {
+    // Given
+    $parser = new Parser('tests/Fixtures/');
+
+    // When
+    $devReqs = $parser->getNpmDevRequirements();
+
+    // Then
+    $expectedDevReqs = [
+        '@eslint/js',
+        '@laravel/vite-plugin-wayfinder',
+        '@tailwindcss/vite',
+        '@types/node',
+        '@vitejs/plugin-vue',
+        '@vue/eslint-config-typescript',
+        'concurrently',
+        'eslint',
+        'eslint-config-prettier',
+        'eslint-plugin-vue',
+        'prettier',
+        'prettier-plugin-organize-imports',
+        'prettier-plugin-tailwindcss',
+        'typescript',
+        'typescript-eslint',
+        'vite',
+        'vue-tsc',
+    ];
+
+    expect($devReqs)->toBe($expectedDevReqs);
+});
+
 // todo next test cases should be based on what you actually see in the wild -
 // is there extra space? do you cover cases where there are only one type of dep (composer vs. npm? dev vs regular dep?)

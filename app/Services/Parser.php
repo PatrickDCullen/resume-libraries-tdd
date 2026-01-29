@@ -25,13 +25,18 @@ class Parser
         return array_keys(json_decode($this->composerJsonContents, true)['require']);
     }
 
-    public function getComposerDevRequirements()
+    public function getComposerDevRequirements(): array
     {
         return array_keys(json_decode($this->composerJsonContents, true)['require-dev']);
     }
 
-    public function getNpmRequirements()
+    public function getNpmRequirements(): array
     {
         return array_keys(json_decode($this->packageJsonContents, true)['dependencies']);
+    }
+
+    public function getNpmDevRequirements(): array
+    {
+        return array_keys(json_decode($this->packageJsonContents, true)['devDependencies']);
     }
 }
