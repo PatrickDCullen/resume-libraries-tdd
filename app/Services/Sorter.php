@@ -6,12 +6,17 @@ use App\Http\Clients\Composer;
 
 class Sorter
 {
-    public static function sortComposerRequirementsByDownloads(array $requirements)
-    {
-        $client = new Composer;
+    protected $client;
 
-        return collect($requirements)->map(function ($package) use ($client) {
-            $downloads = $client->getMonthlyDownloads($package);
+    public function __construct()
+    {
+        $this->client = new Composer;
+    }
+
+    public function sortComposerRequirementsByDownloads(array $requirements)
+    {
+        return collect($requirements)->map(function ($package) {
+            $downloads = $this->client->getMonthlyDownloads($package);
 
             return ['package' => $package, 'downloads' => $downloads];
         })->sortByDesc('downloads')

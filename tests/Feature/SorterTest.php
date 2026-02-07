@@ -11,7 +11,7 @@ test('giving the sorter an array of dependencies outputs the array sorted by dow
     // Given
     $dependencies = ['juling/laravel-devtools', 'fakerphp/faker'];
     // When
-    $composerRequirementsByDownload = Sorter::sortComposerRequirementsByDownloads($dependencies);
+    $composerRequirementsByDownload = (new Sorter)->sortComposerRequirementsByDownloads($dependencies);
     // Then
     $expected = ['fakerphp/faker', 'juling/laravel-devtools'];
     expect($composerRequirementsByDownload)->toBe($expected);

@@ -7,6 +7,7 @@ use App\Services\Sorter;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Storage;
+use SebastianBergmann\Timer\Timer;
 
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
@@ -33,6 +34,9 @@ class DisplayLibraries extends Command
      */
     public function handle()
     {
+        $timer = new Timer;
+        $timer->start();
+
         note('Searching projects for packages.');
 
         $root = $this->getDirectory();
@@ -56,7 +60,11 @@ class DisplayLibraries extends Command
             return 0;
         }
 
-        collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory, $root) {
+        // By creating a single sorter which uses a Composer client instance once and then re-using it for each project
+        // we are able to speed up our application by avoiding unneccessarily reconnecting the HTTP client
+        $sorter = new Sorter;
+
+        collect($projectsDirectory->directories())->each(function ($project) use ($projectsDirectory, $root, $sorter) {
             note("Scanning {$project}...");
 
             if (! $projectsDirectory->exists("{$project}/composer.json") && ! $projectsDirectory->exists("{$project}/package.json")) {
@@ -67,8 +75,8 @@ class DisplayLibraries extends Command
 
             if ($projectsDirectory->exists("{$project}/composer.json")) {
                 note('PHP dependencies detected:');
-                $this->printComposerRequirements($parser);
-                $this->printComposerDevRequirements($parser);
+                $this->printComposerRequirements($parser, $sorter);
+                $this->printComposerDevRequirements($parser, $sorter);
             }
 
             if ($projectsDirectory->exists("{$project}/package.json")) {
@@ -77,27 +85,29 @@ class DisplayLibraries extends Command
                 $this->printNpmDevRequirements($parser);
             }
         });
+
+        note("Finished printing dependencies in {$timer->stop()->asString()}");
     }
 
-    private function printComposerRequirements($parser)
+    private function printComposerRequirements($parser, $sorter)
     {
         if ($parser->getComposerRequirements() === []) {
             return;
         }
 
         $requirements = $parser->getComposerRequirements();
-        $requirementsByMonthlyDownloads = Sorter::sortComposerRequirementsByDownloads($requirements);
+        $requirementsByMonthlyDownloads = $sorter->sortComposerRequirementsByDownloads($requirements);
         info(implode(', ', $requirementsByMonthlyDownloads));
     }
 
-    private function printComposerDevRequirements($parser)
+    private function printComposerDevRequirements($parser, $sorter)
     {
         if ($parser->getComposerDevRequirements() === []) {
             return;
         }
 
         $requirements = $parser->getComposerDevRequirements();
-        $requirementsByMonthlyDownloads = Sorter::sortComposerRequirementsByDownloads($requirements);
+        $requirementsByMonthlyDownloads = $sorter->sortComposerRequirementsByDownloads($requirements);
         info(implode(', ', $requirementsByMonthlyDownloads));
     }
 
