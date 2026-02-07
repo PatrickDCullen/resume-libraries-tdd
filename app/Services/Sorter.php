@@ -2,30 +2,18 @@
 
 namespace App\Services;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Utils;
+use App\Http\Clients\Composer;
 
 class Sorter
 {
     public function getComposerRequirementsByDownloads(array $requirements)
     {
-        return collect($requirements)->map(function ($req) {
-            $client = new Client([
-                'base_uri' => 'https://packagist.org/',
-                'version' => '2.0',
-                'headers' => [
-                    'user-agent' => Utils::defaultUserAgent().' '.'mailto=cullenpatrickd@gmail.com',
-                ],
-            ]);
+        $client = new Composer;
 
-            $result = $client
-                ->get("packages/{$req}.json", [])
-                ->getBody()
-                ->getContents();
+        return collect($requirements)->map(function ($package) use ($client) {
+            $downloads = $client->getMonthlyDownloads($package);
 
-            $downloads = json_decode($result)->package->downloads->monthly;
-
-            return ['package' => $req, 'downloads' => $downloads];
+            return ['package' => $package, 'downloads' => $downloads];
         })->sortByDesc('downloads')
             ->values()
             ->map(function ($item) {
