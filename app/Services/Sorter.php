@@ -6,7 +6,7 @@ use App\Http\Clients\Composer;
 
 class Sorter
 {
-    public function getComposerRequirementsByDownloads(array $requirements)
+    public static function sortComposerRequirementsByDownloads(array $requirements)
     {
         $client = new Composer;
 

@@ -27,6 +27,7 @@ class Composer
             ->getBody()
             ->getContents();
 
-        return json_decode($result)->package->downloads->monthly;
+        // Some "packages" may not be on Packagist such as php and php extensions
+        return json_decode($result)?->package?->downloads?->monthly ?? 0;
     }
 }

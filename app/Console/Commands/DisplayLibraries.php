@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\Parser;
+use App\Services\Sorter;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Storage;
@@ -80,12 +81,24 @@ class DisplayLibraries extends Command
 
     private function printComposerRequirements($parser)
     {
-        $parser->getComposerRequirements() === [] ?: info(implode(', ', $parser->getComposerRequirements()));
+        if ($parser->getComposerRequirements() === []) {
+            return;
+        }
+
+        $requirements = $parser->getComposerRequirements();
+        $requirementsByMonthlyDownloads = Sorter::sortComposerRequirementsByDownloads($requirements);
+        info(implode(', ', $requirementsByMonthlyDownloads));
     }
 
     private function printComposerDevRequirements($parser)
     {
-        $parser->getComposerDevRequirements() === [] ?: info(implode(', ', $parser->getComposerDevRequirements()));
+        if ($parser->getComposerDevRequirements() === []) {
+            return;
+        }
+
+        $requirements = $parser->getComposerDevRequirements();
+        $requirementsByMonthlyDownloads = Sorter::sortComposerRequirementsByDownloads($requirements);
+        info(implode(', ', $requirementsByMonthlyDownloads));
     }
 
     private function printNpmRequirements($parser)
