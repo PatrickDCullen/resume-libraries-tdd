@@ -81,8 +81,8 @@ class DisplayLibraries extends Command
 
             if ($projectsDirectory->exists("{$project}/package.json")) {
                 note('JavaScript dependencies detected:');
-                $this->printNpmRequirements($parser);
-                $this->printNpmDevRequirements($parser);
+                $this->printNpmRequirements($parser, $sorter);
+                $this->printNpmDevRequirements($parser, $sorter);
             }
         });
 
@@ -111,14 +111,26 @@ class DisplayLibraries extends Command
         info(implode(', ', $requirementsByMonthlyDownloads));
     }
 
-    private function printNpmRequirements($parser)
+    private function printNpmRequirements($parser, $sorter)
     {
-        $parser->getNpmRequirements() === [] ?: info(implode(', ', $parser->getNpmRequirements()));
+        if ($parser->getNpmRequirements() === []) {
+            return;
+        }
+
+        $requirements = $parser->getNpmRequirements();
+        $requirementsByMonthlyDownloads = $sorter->sortNpmRequirementsByDownloads($requirements);
+        info(implode(', ', $requirementsByMonthlyDownloads));
     }
 
-    private function printNpmDevRequirements($parser)
+    private function printNpmDevRequirements($parser, $sorter)
     {
-        $parser->getNpmDevRequirements() === [] ?: info(implode(', ', $parser->getNpmDevRequirements()));
+        if ($parser->getNpmDevRequirements() === []) {
+            return;
+        }
+
+        $requirements = $parser->getNpmDevRequirements();
+        $requirementsByMonthlyDownloads = $sorter->sortNpmRequirementsByDownloads($requirements);
+        info(implode(', ', $requirementsByMonthlyDownloads));
     }
 
     private function getDirectory()
