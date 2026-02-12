@@ -3,11 +3,10 @@
 use App\Services\Sorter;
 use Illuminate\Support\Facades\Http;
 
-// This test alone adds 0.5s to suite when "fresh", 0.25 when cached by Packagist
+// This test alone adds 0.5s to suite when HTTP requests are "fresh", 0.25 when cached by Packagist
 // (actually half that when client is instantiated outside of loop)
-// Also depends on monthy downloads of both packages
-// Ideally, we would say "given this canned HTTP response, this is what we expect"
-// Note: Maybe HTTP Facade which has testing methods on it is a step in the right direction
+// Has an dependency on the actual downloads count of both projects which is subject to change
+// Both issues can be fixed by refactoring Sorter to use the HTTP facade and stubbing responses like below
 test('giving the sorter an array of dependencies outputs the array sorted by downloads, descending', function () {
     // Given
     $dependencies = ['juling/laravel-devtools', 'fakerphp/faker'];
@@ -18,8 +17,6 @@ test('giving the sorter an array of dependencies outputs the array sorted by dow
     expect($composerRequirementsByDownload)->toBe($expected);
 });
 
-// TODO
-// refactor to HTTP facade vs. Guzzle Client?
 // figure out how to run "integration" tests outside? (or maybe, for now just a way to manually run them once when merging)
 
 test('the sorter can take an array of JavaScript dependencies and sort it by downloads, descending', function () {

@@ -1,3 +1,12 @@
-### Notes
+# Roadmap
+- Provide summary output table of libraries used the most across your projects
+- HTTP Pooling to increase speed of interacting with Composer API
 
-Currently there are assumptions/hardcoding in at least some tests and the command itself that this is being run from my Personal directory, not projects.
+# Tech Debt
+- Tests with a dependency on HTTP requests (integration tests take 20+ minutes)
+- Lack of clarity around filesystem - hardcoding and assumptions tied to my local disk
+
+# Curiosities (Research)
+- NPM API improvements - replication API, Pooling (this is the bulk of program run time)
+- Plugins for other languages (i.e. how to better abstract?)
+- Automated error sharing to a centralized source
